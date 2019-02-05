@@ -152,7 +152,7 @@ class PlotWidget(QWidget):
 
         self._home_button = QPushButton()
         self._home_button.setToolTip("Reset View")
-        self._home_button.setIcon(QIcon.fromTheme('go-home'))
+        self._home_button.setIcon(QIcon.fromTheme('go-home', QIcon(QPixmap(os.path.join(rp.get_path('rqt_bag_plugins'), 'resource', 'icons', 'go-home.png')))))
         self._home_button.clicked.connect(self.home)
         self.plot_toolbar_layout.addWidget(self._home_button)
 

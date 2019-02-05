@@ -31,7 +31,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 from .message_view import MessageView
 
-from python_qt_binding.QtGui import QIcon
+import rospkg
+from python_qt_binding.QtGui import QIcon, QPixmap
 from python_qt_binding.QtWidgets import QAction, QToolBar
 
 
@@ -49,19 +50,24 @@ class TopicMessageView(MessageView):
         self._name = parent.objectName()
 
         self.toolbar = QToolBar()
-        self._first_action = QAction(QIcon.fromTheme('go-first'), '', self.toolbar)
+        self._first_action = QAction(QIcon.fromTheme('go-first',self.getPixmapIcon('go-first')), '', self.toolbar)
         self._first_action.triggered.connect(self.navigate_first)
         self.toolbar.addAction(self._first_action)
-        self._prev_action = QAction(QIcon.fromTheme('go-previous'), '', self.toolbar)
+        self._prev_action = QAction(QIcon.fromTheme('go-previous',self.getPixmapIcon('go-previous')), '', self.toolbar)
         self._prev_action.triggered.connect(self.navigate_previous)
         self.toolbar.addAction(self._prev_action)
-        self._next_action = QAction(QIcon.fromTheme('go-next'), '', self.toolbar)
+        self._next_action = QAction(QIcon.fromTheme('go-next',self.getPixmapIcon('go-next')), '', self.toolbar)
         self._next_action.triggered.connect(self.navigate_next)
         self.toolbar.addAction(self._next_action)
-        self._last_action = QAction(QIcon.fromTheme('go-last'), '', self.toolbar)
+        self._last_action = QAction(QIcon.fromTheme('go-last',self.getPixmapIcon('go-last')), '', self.toolbar)
         self._last_action.triggered.connect(self.navigate_last)
         self.toolbar.addAction(self._last_action)
         parent.layout().addWidget(self.toolbar)
+
+    def getPixmapIcon(self, name):
+        rp=rospkg.RosPack()
+        icon_file = os.path.join(rp.get_path('rqt_gui'), 'resource', 'icons', name+'.png')
+        return QIcon(QPixmap(icon_file))
 
     @property
     def parent(self):
