@@ -38,7 +38,7 @@ import rospkg
 
 from python_qt_binding import loadUi
 from python_qt_binding.QtCore import qDebug, Qt, qWarning, Signal
-from python_qt_binding.QtGui import QIcon
+from python_qt_binding.QtGui import QIcon, QPixmap
 from python_qt_binding.QtWidgets import QFileDialog, QGraphicsView, QWidget
 
 import rosbag
@@ -79,22 +79,22 @@ class BagWidget(QWidget):
         self.graphics_view.resizeEvent = self._resizeEvent
         self.graphics_view.setMouseTracking(True)
 
-        self.play_icon = QIcon.fromTheme('media-playback-start')
-        self.pause_icon = QIcon.fromTheme('media-playback-pause')
+        self.play_icon = QIcon.fromTheme('media-playback-start', self.getPixmapIcon('media-playback-start'))
+        self.pause_icon = QIcon.fromTheme('media-playback-pause', self.getPixmapIcon('media-playback-pause'))
         self.play_button.setIcon(self.play_icon)
-        self.begin_button.setIcon(QIcon.fromTheme('media-skip-backward'))
-        self.end_button.setIcon(QIcon.fromTheme('media-skip-forward'))
-        self.slower_button.setIcon(QIcon.fromTheme('media-seek-backward'))
-        self.faster_button.setIcon(QIcon.fromTheme('media-seek-forward'))
-        self.previous_button.setIcon(QIcon.fromTheme('go-previous'))
-        self.next_button.setIcon(QIcon.fromTheme('go-next'))
-        self.zoom_in_button.setIcon(QIcon.fromTheme('zoom-in'))
-        self.zoom_out_button.setIcon(QIcon.fromTheme('zoom-out'))
-        self.zoom_all_button.setIcon(QIcon.fromTheme('zoom-original'))
-        self.thumbs_button.setIcon(QIcon.fromTheme('insert-image'))
-        self.record_button.setIcon(QIcon.fromTheme('media-record'))
-        self.load_button.setIcon(QIcon.fromTheme('document-open'))
-        self.save_button.setIcon(QIcon.fromTheme('document-save'))
+        self.begin_button.setIcon(QIcon.fromTheme('media-skip-backward', self.getPixmapIcon('media-skip-backward')))
+        self.end_button.setIcon(QIcon.fromTheme('media-skip-forward', self.getPixmapIcon('media-skip-forward')))
+        self.slower_button.setIcon(QIcon.fromTheme('media-seek-backward', self.getPixmapIcon('media-seek-backward')))
+        self.faster_button.setIcon(QIcon.fromTheme('media-seek-forward', self.getPixmapIcon('media-seel-forward')))
+        self.previous_button.setIcon(QIcon.fromTheme('go-previous', self.getPixmapIcon('go-previous')))
+        self.next_button.setIcon(QIcon.fromTheme('go-next', self.getPixmapIcon('go-next')))
+        self.zoom_in_button.setIcon(QIcon.fromTheme('zoom-in', self.getPixmapIcon('zoom-in')))
+        self.zoom_out_button.setIcon(QIcon.fromTheme('zoom-out', self.getPixmapIcon('zoom-out')))
+        self.zoom_all_button.setIcon(QIcon.fromTheme('zoom-original', self.getPixmapIcon('zoom-original')))
+        self.thumbs_button.setIcon(QIcon.fromTheme('insert-image', self.getPixmapIcon('insert-image')))
+        self.record_button.setIcon(QIcon.fromTheme('media-record', self.getPixmapIcon('media-record')))
+        self.load_button.setIcon(QIcon.fromTheme('document-open', self.getPixmapIcon('document-open')))
+        self.save_button.setIcon(QIcon.fromTheme('document-save', self.getPixmapIcon('document-save')))
 
         self.play_button.clicked[bool].connect(self._handle_play_clicked)
         self.thumbs_button.clicked[bool].connect(self._handle_thumbs_clicked)
@@ -148,6 +148,11 @@ class BagWidget(QWidget):
         else:
             # Maintains functionality for all other keys QGraphicsView implements
             QGraphicsView.keyPressEvent(self.graphics_view, event)
+
+    def getPixmapIcon(self, name):
+        rp=rospkg.RosPack()
+        icon_file = os.path.join(rp.get_path('rqt_gui'), 'resource', 'icons', name+'.png')
+        return QIcon(QPixmap(icon_file))
 
     # callbacks for ui events
     def on_key_press(self, event):
