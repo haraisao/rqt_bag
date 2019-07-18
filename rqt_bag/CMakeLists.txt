@@ -15,3 +15,7 @@ install(DIRECTORY launch resource
 install(PROGRAMS scripts/rqt_bag
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+if(WIN32)
+  install_python_cli(rqt_bag)
+endif()
